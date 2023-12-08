@@ -1,0 +1,19 @@
+package jsp.com.connection;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import com.mysql.cj.jdbc.Driver;
+
+public class JdbcConnection {
+	static String url="jdbc:mysql://localhost:3306/mydatabase";
+	static String user="root";
+	static String password="root";
+	//create method for get connection method
+	public static Connection getConnection() throws Exception {
+			DriverManager.registerDriver(new Driver());
+			Connection connection= DriverManager.getConnection(url,user,password);
+			return connection;
+	}
+}
