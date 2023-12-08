@@ -1,0 +1,100 @@
+//creating 
+package com.jsp.alinesController;
+
+import com.jsp.alinesDAO.AliensDAO;
+
+public class Table {
+	public static void main(String[] args) {
+		AliensDAO dao=new AliensDAO();
+		System.out.println(dao.createTable());
+	
+	}
+}
+
+
+//saving
+package com.jsp.alinesController;
+
+import com.jsp.aliens.Alien;
+import com.jsp.alinesDAO.AliensDAO;
+
+public class Save {
+	public static void main(String[] args) {
+		AliensDAO dao=new AliensDAO();
+		System.out.println(dao.save(3,"ron",25,"male"));
+		
+	}
+}
+
+
+//display
+package com.jsp.alinesController;
+
+import java.util.List;
+
+import com.jsp.aliens.Alien;
+import com.jsp.alinesDAO.AliensDAO;
+
+public class DisplayAll {
+	public static void main(String[] args) {
+		AliensDAO dao=new AliensDAO();
+		List<Alien> list=dao.displayAll();
+		for(Alien alien:list) {
+			System.out.println(alien.getId()+" "+alien.getName()+" "+alien.getAge()+" "+alien.getGender());
+		}
+	}
+}
+
+
+//updating
+package com.jsp.alinesController;
+
+import com.jsp.aliens.Alien;
+import com.jsp.alinesDAO.AliensDAO;
+
+public class Update {
+	public static void main(String[] args) {
+		AliensDAO dao =new AliensDAO();
+		Alien alien=new Alien();
+		alien.setId(1);
+		alien.setName("ram");
+		alien.setAge(29);
+		alien.setGender("female");
+		if(dao.update(alien)==1)
+			System.out.println("updated");
+		else
+			System.out.println("nt updated");
+	}
+}
+
+
+//deleting
+package com.jsp.alinesController;
+
+import com.jsp.alinesDAO.AliensDAO;
+
+public class Delete {
+	public static void main(String[] args) {
+		AliensDAO dao=new AliensDAO();
+		if(dao.remove(3)==1) {
+			System.out.println("deleted");
+		}
+		else
+			System.out.println("not deleted");
+	}
+
+}
+
+//get by id
+package com.jsp.alinesController;
+
+import com.jsp.aliens.Alien;
+import com.jsp.alinesDAO.AliensDAO;
+
+public class GetById {
+	public static void main(String[] args) {
+		AliensDAO dao=new AliensDAO();
+		Alien alien= dao.getById(5);
+		System.out.println(alien.getName()+" "+alien.getAge());
+	}
+}
