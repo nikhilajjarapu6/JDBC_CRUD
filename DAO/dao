@@ -1,0 +1,139 @@
+package com.jsp.alinesDAO;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.jsp.aliens.Alien;
+
+import jsp.com.connection.JdbcConnection;
+
+public class AliensDAO {
+	//creating table
+	public boolean createTable() {
+		boolean table=true;
+		try {
+			Connection connection=	JdbcConnection.getConnection();
+			Statement statement=connection.createStatement();
+			String CreateTable="create table alines("+
+					"Id int primary key,"+
+					"Name varchar(45) not null,"+
+					"age int not null,"+
+					"gender varchar(45) not null)";
+			 table=statement.execute(CreateTable);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return table;
+		}
+	
+	//saving
+	public boolean save(int id,String name,int age,String Gender) {
+		boolean rowseffected=true;
+	try {
+		Connection connection=	JdbcConnection.getConnection();
+		String insertQuery="insert into alines values(?,?,?,?)";
+		
+		PreparedStatement statement=connection.prepareStatement(insertQuery);
+		statement.setInt(1,id);
+		statement.setString(2,name);
+		statement.setInt(3,age);
+		statement.setString(4,Gender);
+		rowseffected= statement.execute();
+		
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	return rowseffected;
+	}
+	
+	
+	//getBy id
+	public Alien getById(int id) {
+		Alien alien=null;
+		try {
+			Connection connection=JdbcConnection.getConnection();
+			String query="select * from alines where alines.id=?";
+			PreparedStatement statement=connection.prepareStatement(query);
+			statement.setInt(1, id);
+			ResultSet set= statement.executeQuery();
+			if(set.next()) {
+			 alien=new Alien();
+			alien.setName(set.getString("name"));
+			alien.setAge(set.getInt("age"));
+			}
+			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return alien;
+	}
+	
+	
+	//display all	
+	public List<Alien> displayAll(){
+		List<Alien> list=new ArrayList<>();
+		try {
+			Connection connection=JdbcConnection.getConnection();
+			String query="select * from alines";
+			PreparedStatement statement=connection.prepareStatement(query);
+			ResultSet set=statement.executeQuery();
+			while(set.next()) {
+				Alien alien=new Alien();
+				alien.setId(set.getInt(1));  //or we can write column names
+				alien.setName(set.getString(2));
+				alien.setAge(set.getInt(3));
+				alien.setGender(set.getString(4));
+				list.add(alien);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	//update
+	public int update(Alien alien) {
+		int update=0;
+		try {
+			Connection connection=JdbcConnection.getConnection();
+			String query="update alines set name=?,age=?,gender=? where id=?";
+			PreparedStatement statement=connection.prepareStatement(query);
+			statement.setInt(4, alien.getId());
+			statement.setString(1,alien.getName());
+			statement.setInt(2,alien.getAge());
+			statement.setString(3,alien.getGender());
+			update = statement.executeUpdate();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return update;
+	}
+	
+	//remove
+	public int remove(int id) {
+		int deleted=0;
+		try {
+			Connection connection=JdbcConnection.getConnection();
+			String query="delete from alines where id=?";
+			PreparedStatement preparedStatement=connection.prepareStatement(query);
+			preparedStatement.setInt(1, id);
+			deleted=preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return deleted;
+		
+	}
+}
